@@ -1,6 +1,7 @@
 import React from 'react'
-import './RightSider.css'
+import './Right.css'
 import assets from '../../assets/assets'
+import { logout } from '../../config/firebase'
 const RightSider = () => {
   return (
     <div className='rs'>
@@ -21,8 +22,7 @@ const RightSider = () => {
           <img src={assets.pic2} alt="" />
         </div>
       </div>
-      <button>Logout</button>
-      
+      <button onClick={logout}>Logout</button>      
     </div>
   )
 }
