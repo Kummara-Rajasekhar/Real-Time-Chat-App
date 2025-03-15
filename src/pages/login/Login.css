@@ -70,3 +70,12 @@
     cursor: pointer;
 
 }
+
+@media (max-width:900px){
+    .chat-container{
+        display: flex;
+    }
+    .loading{
+        font-size: 30px;
+    }
+}

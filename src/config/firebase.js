@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
-import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut} from 'firebase/auth'
-import {doc, getFirestore,setDoc} from 'firebase/firestore'
+import {createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut} from 'firebase/auth'
+import {collection, doc, getFirestore,query,setDoc} from 'firebase/firestore'
 import { toast } from "react-toastify";
 const firebaseConfig = {
   apiKey: "AIzaSyCiKoaRrWLkaQTwh45P-Yv7FuhFw-6DUPc",
@@ -31,7 +31,7 @@ const signup=async(username,email,password)=>{
             lastSeen:Date.now()
         })
         await setDoc(doc(db,"chats",user.uid),{
-            chatData:[]
+            chatsData:[]
         })
 
     }catch(error){
@@ -57,4 +57,24 @@ const logout=async()=>{
     }
 }
 
-export {signup,login,logout,auth,db}
+const resetPass=async(email)=>{
+    if(!email){
+        toast.error("Enter your email")
+        return null;
+    }
+    try{
+        const userRef=collection(db,'users');
+        if(!QuerySnapshot.empty){
+            await sendPasswordResetEmail(auth,email)
+            toast.success("Reset Email Sent")
+        }else{
+            toast.error("Email doesn't exists")
+        }
+
+    }catch(error){
+        toast.error(error.message)
+    }
+
+}
+
+export {signup,login,logout,auth,db,resetPass}

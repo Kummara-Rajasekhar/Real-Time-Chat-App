@@ -117,3 +117,9 @@
 .menu:hover .sub-menu{
     display: block;
 }
+.friends .border{
+    border: 3px solid #07fff3;
+}
+.friends .border div{
+    color:#07fff3 ;
+}

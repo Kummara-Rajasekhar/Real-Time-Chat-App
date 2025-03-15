@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './ProfileUpdate.css'
 import assets from '../../assets/assets'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../../config/firebase'
-import { getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import upload from '../../lib/Upload'
+import { AppContext } from '../../context/AppContext'
 const ProfileUpdate = () => {
 
   const [image,setimage]=useState(false)
@@ -12,11 +15,37 @@ const ProfileUpdate = () => {
   const [bio,setbio]=useState("")
   const [uid,setuid]=useState("")
   const [preimage,serpreimage]=useState("")
+  const {setuserdata}=useContext(AppContext)
   const navigate=useNavigate()
 
 
   const prefileupdate=async(e)=>{
-
+    e.preventDefault()
+    try{
+      if(!preimage && !image){
+        toast.error("Upload Profile Picture")
+      }
+      const docRef=doc(db,"users",uid)
+      if(image){
+        const imgUrl=await upload(image);
+        serpreimage(imgUrl)
+        await updateDoc(docRef,{
+          avatar:imgUrl,
+          bio:bio,
+          name:name
+        })
+      }else{
+        await updateDoc(docRef,{
+          bio:bio,
+          name:name
+        })
+      }
+      const snap=await getDoc(docRef)
+      setuserdata(snap.data())
+      navigate('/chat')
+    }catch(error){
+      toast.error(error.message)
+    }
   }
   useEffect(()=>{
     onAuthStateChanged(auth,async(user)=>{
@@ -53,7 +82,7 @@ const ProfileUpdate = () => {
           <button type='submit'>Save</button>
 
         </form>
-        <img className='profile-pic' src={image ? URL.createObjectURL(image) : assets.logo_icon} alt="" />
+        <img className='profile-pic' src={image ? URL.createObjectURL(image) : preimage ? preimage:  assets.logo_icon} alt="" />
 
       </div>
       

@@ -24,7 +24,12 @@ const upload = async (file) => {
 
     const message4 = 'data:text/plain;base64,5b6p5Y+344GX44G+44GX44Gf77yB44GK44KB44Gn44Go44GG77yB';
     uploadString(storageRef, message4, 'data_url').then((snapshot) => {
-        resolve(getDownloadURL)
+        return(getDownloadURL)
     });
+
+
+    return new Promise((resolve,reject)=>{
+        
+    })
 }
 export default upload
