@@ -134,6 +134,7 @@ const ChatBox = () => {
           ))
         }
       </div>
+      
 
       <div className="chat-input">
         <input onChange={(e) => setinput(e.target.value)} value={input} type="text" placeholder='Send a message' />
